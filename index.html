@@ -222,6 +222,129 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 1000px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .close-button {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #4a5568;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .modal-left {
+            border-right: 1px solid #e2e8f0;
+            padding-right: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-icon {
+            font-size: 2rem;
+            margin-right: 0.8rem;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            color: #2d3748;
+        }
+
+        .modal-price-section {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .capabilities-list, .use-cases-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .capabilities-list li, .use-cases-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .integration-item {
+            background: #f7fafc;
+            padding: 0.8rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .modal h3 {
+            color: #2d3748;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        .deploy-button {
+            padding: 0.8rem 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .modal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-left {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                padding-right: 0;
+                padding-bottom: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -240,7 +363,7 @@
         <button class="nav-button prev" onclick="scrollSection('latest-agents', 'left')">←</button>
         <button class="nav-button next" onclick="scrollSection('latest-agents', 'right')">→</button>
         <div class="scroll-container" id="latest-agents">
-            <div class="card">
+            <div class="card" data-agent-id="real-estate">
                 <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa" alt="Real Estate" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🏠</span>
@@ -262,7 +385,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="crypto">
                 <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432" alt="Crypto Trading" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">💰</span>
@@ -284,7 +407,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="ai-model">
                 <img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868" alt="AI Model" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🤖</span>
@@ -306,7 +429,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="saas">
                 <img src="https://images.unsplash.com/photo-1552664730-d307ca884978" alt="SaaS Sales" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">💻</span>
@@ -328,7 +451,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="course">
                 <img src="https://images.unsplash.com/photo-1434626881859-194d67b2b86f" alt="Course Creator" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">📚</span>
@@ -358,7 +481,7 @@
         <button class="nav-button prev" onclick="scrollSection('popular-agents', 'left')">←</button>
         <button class="nav-button next" onclick="scrollSection('popular-agents', 'right')">→</button>
         <div class="scroll-grid" id="popular-agents">
-            <div class="card">
+            <div class="card" data-agent-id="influencer">
                 <img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868" alt="Influencer" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">⭐</span>
@@ -380,7 +503,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="dropshipping">
                 <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc" alt="Dropshipping" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">📦</span>
@@ -402,7 +525,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="theme">
                 <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8" alt="Theme Pages" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🎨</span>
@@ -424,7 +547,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="agency">
                 <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623" alt="Agency" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🎯</span>
@@ -446,8 +569,8 @@
                 </div>
             </div>
 
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40" alt="Consultant" class="card-image">
+            <div class="card" data-agent-id="consultant">
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e" alt="Consultant" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">👔</span>
                     <h2 class="card-title">Consulting Agent</h2>
@@ -468,7 +591,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="gym">
                 <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e" alt="Gym" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">💪</span>
@@ -490,7 +613,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="property">
                 <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa" alt="Property" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🏢</span>
@@ -512,7 +635,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="restaurant">
                 <img src="https://images.unsplash.com/photo-1606836576983-8b458e75221d" alt="Restaurant" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🍽️</span>
@@ -534,7 +657,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-agent-id="event">
                 <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4" alt="Events" class="card-image">
                 <div class="card-header">
                     <span class="card-icon">🎪</span>
@@ -658,6 +781,41 @@
         </div>
     </div>
 
+    <!-- Add this modal HTML just before the closing </body> tag -->
+    <div id="agent-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-grid">
+                <div class="modal-left">
+                    <img id="modal-image" src="" alt="Agent" class="modal-image">
+                    <div class="modal-header">
+                        <span id="modal-icon" class="modal-icon"></span>
+                        <h2 id="modal-title" class="modal-title"></h2>
+                    </div>
+                    <div id="modal-tags" class="tags"></div>
+                    <div id="modal-tools" class="tools-list"></div>
+                    <div class="modal-price-section">
+                        <span id="modal-price" class="price"></span>
+                        <button class="button deploy-button">Deploy Agent</button>
+                    </div>
+                </div>
+                <div class="modal-right">
+                    <h3>About this Agent</h3>
+                    <p id="modal-description" class="modal-description"></p>
+                    
+                    <h3>Capabilities</h3>
+                    <ul id="modal-capabilities" class="capabilities-list"></ul>
+                    
+                    <h3>Use Cases</h3>
+                    <ul id="modal-use-cases" class="use-cases-list"></ul>
+                    
+                    <h3>Integration Options</h3>
+                    <div id="modal-integrations" class="integrations-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
     function scrollSection(id, direction) {
         const container = document.getElementById(id);
@@ -691,6 +849,99 @@
         containers.forEach(container => {
             updateNavButtons(container);
             container.addEventListener('scroll', () => updateNavButtons(container));
+        });
+    });
+
+    const modal = document.getElementById('agent-modal');
+    const closeButton = document.querySelector('.close-button');
+
+    // Agent data object
+    const agentData = {
+        'real-estate': {
+            title: 'Real Estate Agent',
+            icon: '🏠',
+            image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa',
+            price: '$89/mo',
+            description: 'Advanced AI agent specialized in real estate operations, capable of handling property inquiries, scheduling viewings, and qualifying potential buyers.',
+            capabilities: [
+                '24/7 Lead Qualification',
+                'Automated Property Matching',
+                'Viewing Schedule Management',
+                'Price Negotiation Assistance',
+                'Market Analysis Reports'
+            ],
+            useCases: [
+                'Property Listings Management',
+                'Client Inquiry Handling',
+                'Open House Coordination',
+                'Follow-up Communications',
+                'Market Updates Distribution'
+            ],
+            integrations: [
+                'Zillow',
+                'MLS',
+                'DocuSign',
+                'Gmail',
+                'Calendar',
+                'WhatsApp'
+            ]
+        },
+        // Add more agents here...
+    };
+
+    // Function to open modal with agent data
+    function openAgentModal(agentId) {
+        const agent = agentData[agentId];
+        if (!agent) return;
+
+        // Populate modal with agent data
+        document.getElementById('modal-image').src = agent.image;
+        document.getElementById('modal-icon').textContent = agent.icon;
+        document.getElementById('modal-title').textContent = agent.title;
+        document.getElementById('modal-price').textContent = agent.price;
+        document.getElementById('modal-description').textContent = agent.description;
+
+        // Populate capabilities
+        const capabilitiesList = document.getElementById('modal-capabilities');
+        capabilitiesList.innerHTML = agent.capabilities
+            .map(cap => `<li>✓ ${cap}</li>`)
+            .join('');
+
+        // Populate use cases
+        const useCasesList = document.getElementById('modal-use-cases');
+        useCasesList.innerHTML = agent.useCases
+            .map(use => `<li>• ${use}</li>`)
+            .join('');
+
+        // Populate integrations
+        const integrationsGrid = document.getElementById('modal-integrations');
+        integrationsGrid.innerHTML = agent.integrations
+            .map(int => `<div class="integration-item">${int}</div>`)
+            .join('');
+
+        // Show modal
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal when clicking the close button or outside the modal
+    closeButton.onclick = function() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Add click handlers to all agent cards
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+            const agentId = card.dataset.agentId;
+            openAgentModal(agentId);
         });
     });
     </script>
