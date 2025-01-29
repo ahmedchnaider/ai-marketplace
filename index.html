@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Marketplace 🤖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2d3748;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            padding: 0.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 140px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            margin-right: 0.8rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .card-description {
+            color: #4a5568;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price {
+            color: #48bb78;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .button {
+            background: #4299e1;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .button:hover {
+            background: #3182ce;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.4rem;
+            margin: 0.8rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #edf2f7;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #4a5568;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin: 3rem 0 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid #4299e1;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tools-list {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tool-badge {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .section-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .scroll-container {
+            display: flex;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .scroll-grid {
+            display: grid;
+            grid-template-rows: repeat(2, 1fr);
+            grid-auto-flow: column;
+            grid-auto-columns: 280px;
+            gap: 1.5rem;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            padding: 1rem 0;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: background 0.2s;
+        }
+
+        .nav-button:hover {
+            background: #f8f9fa;
+        }
+
+        .nav-button.prev {
+            left: -20px;
+        }
+
+        .nav-button.next {
+            right: -20px;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 AI Marketplace</h1>
+        <p>Deploy Intelligent AI Agents for Your Business</p>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" placeholder="🔍 Search for AI agents...">
+    </div>
+
+    <!-- Latest Agents Section -->
+    <h2 class="section-title">🆕 Latest Agents</h2>
+    <div class="section-container">
+        <button class="nav-button prev" onclick="scrollSection('latest-agents', 'left')">←</button>
+        <button class="nav-button next" onclick="scrollSection('latest-agents', 'right')">→</button>
+        <div class="scroll-container" id="latest-agents">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa" alt="Real Estate" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🏠</span>
+                    <h2 class="card-title">Real Estate Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Property Sales</span>
+                    <span class="tag">Lead Generation</span>
+                </div>
+                <p class="card-description">AI agent specialized in property listings, client inquiries, and scheduling viewings.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📧 Email</span>
+                    <span class="tool-badge">💬 Chat</span>
+                    <span class="tool-badge">📅 Calendar</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$89/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432" alt="Crypto Trading" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">💰</span>
+                    <h2 class="card-title">Crypto Expert</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Cryptocurrency</span>
+                    <span class="tag">Trading</span>
+                </div>
+                <p class="card-description">Cryptocurrency specialist providing market insights, trading strategies, and portfolio management.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📊 Analytics</span>
+                    <span class="tool-badge">💬 Chat</span>
+                    <span class="tool-badge">📱 Alerts</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$129/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868" alt="AI Model" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🤖</span>
+                    <h2 class="card-title">AI Model Expert</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">AI Development</span>
+                    <span class="tag">ML Ops</span>
+                </div>
+                <p class="card-description">Technical AI specialist for model deployment, optimization, and maintenance guidance.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📊 Analytics</span>
+                    <span class="tool-badge">💻 Code</span>
+                    <span class="tool-badge">📈 Metrics</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$149/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978" alt="SaaS Sales" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">💻</span>
+                    <h2 class="card-title">SaaS Sales Expert</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">B2B Sales</span>
+                    <span class="tag">Software</span>
+                </div>
+                <p class="card-description">Specialized in SaaS product demos, feature explanation, and subscription sales.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">🎥 Demo</span>
+                    <span class="tool-badge">💬 Chat</span>
+                    <span class="tool-badge">📊 CRM</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$129/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1434626881859-194d67b2b86f" alt="Course Creator" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">📚</span>
+                    <h2 class="card-title">Course Sales Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Education</span>
+                    <span class="tag">Digital Products</span>
+                </div>
+                <p class="card-description">Expert in selling online courses, coaching programs, and educational content.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">🎯 Funnel</span>
+                    <span class="tool-badge">📧 Email</span>
+                    <span class="tool-badge">💬 Chat</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$99/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Agents Section -->
+    <h2 class="section-title">🔥 Popular Agents</h2>
+    <div class="section-container">
+        <button class="nav-button prev" onclick="scrollSection('popular-agents', 'left')">←</button>
+        <button class="nav-button next" onclick="scrollSection('popular-agents', 'right')">→</button>
+        <div class="scroll-grid" id="popular-agents">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868" alt="Influencer" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">⭐</span>
+                    <h2 class="card-title">Influencer Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Social Media</span>
+                    <span class="tag">Content Creation</span>
+                </div>
+                <p class="card-description">Social media expert specializing in content strategy and audience growth.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📱 Social</span>
+                    <span class="tool-badge">📸 Media</span>
+                    <span class="tool-badge">📊 Analytics</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$99/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc" alt="Dropshipping" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">📦</span>
+                    <h2 class="card-title">Dropshipping Expert</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">E-commerce</span>
+                    <span class="tag">Product Sourcing</span>
+                </div>
+                <p class="card-description">E-commerce specialist for product sourcing, market research, and store optimization.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">🛍️ Store</span>
+                    <span class="tool-badge">📊 Analytics</span>
+                    <span class="tool-badge">🚚 Logistics</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$119/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8" alt="Theme Pages" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🎨</span>
+                    <h2 class="card-title">Theme Page Creator</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Design</span>
+                    <span class="tag">Branding</span>
+                </div>
+                <p class="card-description">Creative specialist for theme page design, branding, and content curation.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">🎨 Design</span>
+                    <span class="tool-badge">📸 Media</span>
+                    <span class="tool-badge">📱 Social</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$79/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623" alt="Agency" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🎯</span>
+                    <h2 class="card-title">Agency Sales Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Marketing</span>
+                    <span class="tag">Services</span>
+                </div>
+                <p class="card-description">Qualifies leads and books calls for marketing, design, and development agencies.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📅 Calendar</span>
+                    <span class="tool-badge">📧 Email</span>
+                    <span class="tool-badge">💬 Chat</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$149/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40" alt="Consultant" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">👔</span>
+                    <h2 class="card-title">Consulting Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Business</span>
+                    <span class="tag">Consulting</span>
+                </div>
+                <p class="card-description">Qualifies consulting leads and schedules discovery calls for consultants and coaches.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📅 Calendar</span>
+                    <span class="tool-badge">📊 CRM</span>
+                    <span class="tool-badge">📧 Email</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$139/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e" alt="Gym" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">💪</span>
+                    <h2 class="card-title">Fitness Business Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Fitness</span>
+                    <span class="tag">Health</span>
+                </div>
+                <p class="card-description">Handles gym memberships, personal training inquiries, and class bookings.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📅 Booking</span>
+                    <span class="tool-badge">💬 Chat</span>
+                    <span class="tool-badge">📧 Email</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$89/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa" alt="Property" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🏢</span>
+                    <h2 class="card-title">Property Manager Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Property</span>
+                    <span class="tag">Management</span>
+                </div>
+                <p class="card-description">Handles tenant inquiries, maintenance requests, and property viewings.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📅 Schedule</span>
+                    <span class="tool-badge">🎫 Tickets</span>
+                    <span class="tool-badge">📧 Email</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$109/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1606836576983-8b458e75221d" alt="Restaurant" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🍽️</span>
+                    <h2 class="card-title">Restaurant Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Food Service</span>
+                    <span class="tag">Hospitality</span>
+                </div>
+                <p class="card-description">Manages reservations, takeout orders, and customer inquiries for restaurants.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📅 Booking</span>
+                    <span class="tool-badge">🛵 Orders</span>
+                    <span class="tool-badge">💬 Chat</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$79/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4" alt="Events" class="card-image">
+                <div class="card-header">
+                    <span class="card-icon">🎪</span>
+                    <h2 class="card-title">Event Planner Agent</h2>
+                </div>
+                <div class="tags">
+                    <span class="tag">Events</span>
+                    <span class="tag">Planning</span>
+                </div>
+                <p class="card-description">Handles event inquiries, venue bookings, and vendor coordination.</p>
+                <div class="tools-list">
+                    <span class="tool-badge">📅 Calendar</span>
+                    <span class="tool-badge">📧 Email</span>
+                    <span class="tool-badge">📋 Tasks</span>
+                </div>
+                <div class="card-footer">
+                    <span class="price">$119/mo</span>
+                    <a href="#" class="button">Deploy Agent</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools Section -->
+    <h2 class="section-title">🛠️ Available Tools</h2>
+    <div class="marketplace-grid">
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📞</span>
+                <h2 class="card-title">Voice Calls</h2>
+            </div>
+            <p class="card-description">Enable natural voice conversations with automated call handling.</p>
+            <div class="card-footer">
+                <span class="price">+$29/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📧</span>
+                <h2 class="card-title">Email Processing</h2>
+            </div>
+            <p class="card-description">Smart email handling with automated responses and follow-ups.</p>
+            <div class="card-footer">
+                <span class="price">+$19/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">💬</span>
+                <h2 class="card-title">Chat Integration</h2>
+            </div>
+            <p class="card-description">Real-time chat capabilities across multiple platforms.</p>
+            <div class="card-footer">
+                <span class="price">+$24/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <h2 class="card-title">Analytics Dashboard</h2>
+            </div>
+            <p class="card-description">Advanced analytics and reporting capabilities.</p>
+            <div class="card-footer">
+                <span class="price">+$39/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📱</span>
+                <h2 class="card-title">Social Media Integration</h2>
+            </div>
+            <p class="card-description">Connect and manage multiple social media platforms.</p>
+            <div class="card-footer">
+                <span class="price">+$34/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📅</span>
+                <h2 class="card-title">Calendar Management</h2>
+            </div>
+            <p class="card-description">Smart scheduling and calendar optimization.</p>
+            <div class="card-footer">
+                <span class="price">+$15/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">🔔</span>
+                <h2 class="card-title">Alert System</h2>
+            </div>
+            <p class="card-description">Custom alerts and notifications across channels.</p>
+            <div class="card-footer">
+                <span class="price">+$19/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <h2 class="card-title">CRM Integration</h2>
+            </div>
+            <p class="card-description">Connect with popular CRM platforms for lead management.</p>
+            <div class="card-footer">
+                <span class="price">+$29/mo</span>
+                <a href="#" class="button">Add Tool</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function scrollSection(id, direction) {
+        const container = document.getElementById(id);
+        const scrollAmount = 300; // Adjust this value to control scroll distance
+        
+        if (direction === 'left') {
+            container.scrollLeft -= scrollAmount;
+        } else {
+            container.scrollLeft += scrollAmount;
+        }
+        
+        // Update button states
+        updateNavButtons(container);
+    }
+
+    function updateNavButtons(container) {
+        const parent = container.parentElement;
+        const prevButton = parent.querySelector('.prev');
+        const nextButton = parent.querySelector('.next');
+        
+        // Check if we can scroll left
+        prevButton.disabled = container.scrollLeft <= 0;
+        
+        // Check if we can scroll right
+        nextButton.disabled = container.scrollLeft >= container.scrollWidth - container.clientWidth;
+    }
+
+    // Initialize button states and add scroll event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        const containers = document.querySelectorAll('.scroll-container, .scroll-grid');
+        containers.forEach(container => {
+            updateNavButtons(container);
+            container.addEventListener('scroll', () => updateNavButtons(container));
+        });
+    });
+    </script>
+</body>
+</html>
